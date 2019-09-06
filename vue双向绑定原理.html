@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue双向绑定的原理</title>
+</head>
+
+<body>
+  <!-- <script src='vue.js'></script> -->
+  <script>
+    'use strict'
+    // 一、示例
+    // var vm = new Vue({
+    //   data: {
+    //     obj: { a: 1 }
+    //   },
+    //   created: function () {
+    //     console.log(this.obj);
+    //   }
+    // })
+    // 二、实现原理
+    // vue数据双向绑定是通过数据劫持结合发布者-订阅者模式的方式来实现的。
+    // 1)、数据劫持、vue是通过object.defineProperty()来实现数据劫持,其中会有getter()和setter方法
+    //     当读取属性值时,就会触发getter()方法,在view中如果数据发生变化，就会通过Object.defineProperty()
+    //     对属性设置一个setter函数, 当数据改变了就会来触发这个函数。
+    // 1、语法
+    // Object.defineProperty(object, propertyname, descripor) //参数(三个必须)
+    // 2、参数详解
+    // 2.1、object:要在其上添加或修改属性对象。
+    // 2.2、propertyname:一个包含属性名称的字符串。就是需要定义的属性和方法。
+    // 2.3、descripor: 可以包含以下属性，默认情况下， writable， enumerable，configurable值为false
+    //      value:属性的值
+    //      writable:如果为false,属性的值就不能被重写，只能为只读。
+    //      enumerable:是否能枚举,也就是否能在for...in循环中遍历出来或在object.keys中列举出来。
+    //      configurable:如果为false，就不能在设置它的(value,writable,configurable)        
+    //      还有两个方法 (双向数据绑定正是利用了这两个方法,及访问器) get()和set();
+    // 3、案例
+    //      var a = {};
+    //      Object.defineProperty(a, "b", {
+    //        value: "你好",
+    //        writable: false
+    //      })
+    //      // a.b = 'hello world';
+    //      console.log(a.b);
+    //      Object.defineProperty(a, "c", {
+    //        value: function () {
+    //          console.log(a.b)
+    //        }
+    //      })
+    //      a.c();
+    // 4、访问器set和get;
+    //    set();一旦属性被从新赋值，此方法被自动调用。
+    //    get();一旦属性被访问读取，此方法被自动调用。
+    //    不能同时设置访问器(get和set)和wriable或value,否则会错。    
+    //    var a = {};
+    //    Object.defineProperty(a, "b", {
+    //      set: function (val) {
+    //        console.log('赋值时候调用我,我的新值是' + val)
+    //      },
+    //      get: function () {
+    //        console.log('取值的时候调用我')
+    //        return 123
+    //      }
+    //    });
+    //    a.b = 520;//赋值时候调用我，我的新值是520
+    //    console.log(a.b);//取值的时候调用我，返回我设置123，不是开始设置的520
+  </script>
+  <!-- 5、简单的双向绑定
+            给对象a定义新的属性b,并且定义属性b的get和set方法,当a.b的时候会调用b属性的get方法,给b属性赋值的时候，会调用set方法,
+            这就是修改数据的时候,视图会自动更新的关键。(只能兼容IE8以上的浏览器,vue也是如此) -->
+  <!-- <label for="">输入:</label> <input text="text" id='demo1' /><br />
+            <label for="">输出:</label> <input text="text" id='demo2' /><br />
+            <script>
+              var a = {};
+              var output = [];
+              Object.defineProperty(a, 'b', {//给b对象添加属性
+                set: function (val) {
+                  output['b'] = val;
+                  console.log('set')
+                },
+                get: function () {
+                  console.log('get')
+                  return output['b']
+                }
+              })
+              var demo1 = document.querySelector('#demo1');
+              var demo2 = document.querySelector('#demo2');
+              demo1.onkeyup = function () {
+                a.b = demo1.value;//给a对象添加b属性时候,触发了a的set方法,此时#demo1的value值赋给output['b'];
+                demo2.value = output['b'];
+              }
+            </script> -->
+  <!-- 6、再看看Object.defineProperty实践例子-->
+  <!-- <script>
+      Object.defineProperty(Object.prototype, 'extend', {
+        value: function (def, opt) {
+          for (var key in opt) {
+            def[key] = opt[key];
+          }
+          return def;
+        },
+        writable: true,
+        enumerable: false
+      });
+      function func(options) {
+        let lef = {
+          payType: "wechat",
+          buyType: -1,
+          isCard: false,
+          toUid: -1,
+          couponId: -1
+        };
+        let opt = extend(lef, options);
+        console.log(opt)
+        this.isCardPay = opt.isCard;
+        this.payType = opt.payType;
+      }
+      //使用
+      func({
+        payType: 'ali',
+        buyType: 2,
+        isCard: true,
+        toUid: 123456,
+        couponId: 667890
+      })
+    </script> -->
+</body>
+
+</html>
