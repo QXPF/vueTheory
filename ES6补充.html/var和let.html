@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>var和let</title>
+</head>
+
+<body>
+  <button>按钮1</button>
+  <button>按钮2</button>
+  <button>按钮3</button>
+  <button>按钮4</button>
+  <button>按钮5</button>
+  <button>按钮6</button>
+  <script>
+    // let( 变量)/const(常量)
+    //块级作用域
+    {
+      var name = 'tom';
+      console.log(name)
+    }
+    console.log(name)
+    var buttons = document.getElementsByTagName('button');
+    for (var i = 0; i < buttons.length; i++) {
+      (function (i) {
+        buttons[i].onclick = function () {
+          console.log('我点击了第' + i + '个按钮')
+        }
+      })(i)
+    }
+    for (let i = 0; i < buttons.length; i++) {
+      buttons[i].onclick = function () {
+        console.log('我点击了第' + i + '个按钮')
+      }
+    }
+  </script>
+</body>
+
+</html>

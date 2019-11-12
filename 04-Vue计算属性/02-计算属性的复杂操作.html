@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>计算属性的复杂操作</title>
+</head>
+
+<body>
+  <div id='app'>
+    <h2>总价格： {{totalPrice}}</h2>
+    <h2>总价格： {{totalPrice2}}</h2>
+    <h2>总价格： {{totalPrice3}}</h2>
+  </div>
+  <script src='../js/vue.js'></script>
+  <script>
+    var a=()=>{};
+    const app = new Vue({
+      el: '#app',
+      data: {
+        books: [
+          { id: 110, name: '代码大全1', price: 119 },
+          { id: 111, name: '代码大全2', price: 119 },
+          { id: 112, name: '代码大全3', price: 119 },
+          { id: 113, name: '代码大全4', price: 119 },
+        ]
+      },
+      computed: { //计算属性
+        totalPrice: function () {
+          let result = 0;
+          for (var i = 0; i < this.books.length; i++) {
+            result += this.books[i].price;
+          }
+          return result;
+        },
+        totalPrice2: function () {
+          let result = 0;
+          for (let i in this.books) {
+            result += this.books[i].price;
+          }
+          return result;
+        },
+        totalPrice3: function () {
+          let result = 0;
+          for (let book of this.books) {
+            result += book.price;
+          }
+          return result;
+        }
+      },
+
+    })
+  </script>
+</body>
+
+</html>
